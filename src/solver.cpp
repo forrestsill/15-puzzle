@@ -14,7 +14,7 @@ public:
   void printClosed();
 
 private:
-  priority_queue<Board, vector<Board>, less<vector<Board>::value_type>> open;
+  priority_queue<Board, vector<Board>, greater<vector<Board>::value_type>> open;
   vector<Board> closed;
   bool closedContains(Board);
 };

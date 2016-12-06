@@ -237,6 +237,6 @@ void Board::printInfo() {
        << ", frozenPriority: " << this->frozenPriority << "\n";
 }
 
-bool operator<(const Board &lhs, const Board &rhs) {
+bool operator>(const Board &lhs, const Board &rhs) {
   return lhs.frozenPriority > rhs.frozenPriority;
 }
