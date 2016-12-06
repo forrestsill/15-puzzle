@@ -9,6 +9,7 @@ class Point {
 public:
   int x;
   int y;
+
   Point(int, int);
   int numMovesPossible();
 };
@@ -42,11 +43,13 @@ class Board {
 public:
   int blocks[4][4];
   int movesMade;
+  int frozenPriority;
+
   Board(string);
   int hamming();
   int manhattan();
   int priority();
-  void print();
+
   bool equals(Board);
   bool isSolved();
   int numMovesPossible();
@@ -56,10 +59,10 @@ public:
   void moveDown();
   void moveLeft();
   void moveRight();
-  int frozenPriority;
   void freezePriority();
-  string toString();
   void writeBoardToSerialFile();
+  string toString();
+  void print();
 
 private:
   int numBlocksInWrongPosition();
@@ -195,7 +198,6 @@ bool Board::equals(Board b) {
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (this->blocks[i][j] != b.blocks[i][j]) {
-        // cout << "FAILED: " << i << ", " << j << endl;
         return false;
       }
     }

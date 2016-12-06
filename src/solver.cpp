@@ -10,12 +10,13 @@ class Solver {
 public:
   Solver(Board);
   void solve();
-  void print();
   void printClosed();
+  void print();
 
 private:
   priority_queue<Board, vector<Board>, greater<vector<Board>::value_type>> open;
   vector<Board> closed;
+
   bool closedContains(Board);
 };
 
@@ -90,15 +91,6 @@ void Solver::solve() {
   closed.push_back(board);
 }
 
-bool Solver::closedContains(Board board) {
-  for (int k = 0; k < closed.size(); k++) {
-    if (board.equals(closed.at(k))) {
-      return true;
-    }
-  }
-  return false;
-}
-
 void Solver::printClosed() {
   cout << "List of closed:" << endl;
   for (int k = 0; k < closed.size(); k++) {
@@ -122,4 +114,13 @@ void Solver::print() {
   } else {
     printClosed();
   }
+}
+
+bool Solver::closedContains(Board board) {
+  for (int k = 0; k < closed.size(); k++) {
+    if (board.equals(closed.at(k))) {
+      return true;
+    }
+  }
+  return false;
 }
