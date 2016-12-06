@@ -7,7 +7,8 @@
 using namespace std;
 
 int main (int argc, const char* argv[]) {
-	Board blocks (argv[1]);
+	string filename = argv[1];
+	Board blocks (filename);
 	int returnCode = 0;
 	blocks.print();
 	return returnCode;
