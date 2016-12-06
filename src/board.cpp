@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -46,15 +47,54 @@ public:
   int manhattan();
   int priority();
   void print();
+  bool equals(Board);
   bool isSolved();
   int numMovesPossible();
   Point getBlankSpace();
   moves getPossibleMoves();
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
+  int frozenPriority;
+  void freezePriority();
+  string toString();
+  void writeBoardToSerialFile();
 
 private:
   int numBlocksInWrongPosition();
   void printInfo();
 };
+
+void Board::moveUp() {
+  Point blank = getBlankSpace();
+  blocks[blank.x][blank.y] = blocks[blank.x - 1][blank.y];
+  blocks[blank.x - 1][blank.y] = 0;
+  movesMade++;
+}
+
+void Board::moveDown() {
+  Point blank = getBlankSpace();
+  blocks[blank.x][blank.y] = blocks[blank.x + 1][blank.y];
+  blocks[blank.x + 1][blank.y] = 0;
+  movesMade++;
+}
+
+void Board::moveLeft() {
+  Point blank = getBlankSpace();
+  blocks[blank.x][blank.y] = blocks[blank.x][blank.y - 1];
+  blocks[blank.x][blank.y - 1] = 0;
+  movesMade++;
+}
+
+void Board::moveRight() {
+  Point blank = getBlankSpace();
+  blocks[blank.x][blank.y] = blocks[blank.x][blank.y + 1];
+  blocks[blank.x][blank.y + 1] = 0;
+  movesMade++;
+}
+
+void Board::freezePriority() { this->frozenPriority = priority(); }
 
 int Board::numBlocksInWrongPosition() {
   int count = 0;
@@ -68,7 +108,7 @@ int Board::numBlocksInWrongPosition() {
   return count;
 }
 
-int Board::hamming() { return numBlocksInWrongPosition() + this->movesMade; }
+int Board::hamming() { return numBlocksInWrongPosition(); }
 
 moves Board::getPossibleMoves() {
   Point p = getBlankSpace();
@@ -151,26 +191,52 @@ bool Board::isSolved() {
   return true;
 }
 
+bool Board::equals(Board b) {
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (this->blocks[i][j] != b.blocks[i][j]) {
+        // cout << "FAILED: " << i << ", " << j << endl;
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 void Board::print() {
+  cout << toString();
+  printInfo();
+}
+
+string Board::toString() {
+  ostringstream os;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       string toPrint = to_string(this->blocks[i][j]);
       if (!toPrint.compare("0")) {
         toPrint = "-";
       }
-      cout << toPrint << "\t";
+      os << toPrint << "\t";
     }
-    cout << "\n";
+    os << "\n";
   }
-  printInfo();
+  string str = os.str();
+  return str;
+}
+
+void Board::writeBoardToSerialFile() {
+  ofstream file;
+  file.open("output-serial.txt");
+  file << toString();
+  file.close();
 }
 
 void Board::printInfo() {
   cout << "Solved?: " << isSolved() << ", Hamming: " << hamming()
-       << ", Manhattan: " << manhattan() << "\n";
-  // cout << "X: " << x+1 << ", Y: " << y+1 << ", Block: " << goal << ",
-  // X-Distance: " << abs((x % 4) - ((goal - 1) % 4)) << ", Y-Distance: " <<
-  // abs(((goal - 1) / 4) - y) << "\n";
+       << ", Manhattan: " << manhattan()
+       << ", frozenPriority: " << this->frozenPriority << "\n";
 }
 
-bool operator<(Board lhs, Board rhs) { return lhs.priority() < rhs.priority(); }
+bool operator<(const Board &lhs, const Board &rhs) {
+  return lhs.frozenPriority > rhs.frozenPriority;
+}
