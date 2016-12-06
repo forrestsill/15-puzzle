@@ -31,3 +31,5 @@
 *.out
 *.app
 15puzzle
+15puzzle_serial
+15puzzle_parallel
