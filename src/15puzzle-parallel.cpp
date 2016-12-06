@@ -2,7 +2,7 @@
 #include <string>
 
 #include "board.cpp"
-#include "solver.cpp"
+#include "solver-parallel.cpp"
 
 using namespace std;
 

@@ -61,6 +61,7 @@ public:
   void moveRight();
   void freezePriority();
   void writeBoardToSerialFile();
+  void writeBoardToParallelFile();
   string toString();
   void print();
 
@@ -229,6 +230,13 @@ string Board::toString() {
 void Board::writeBoardToSerialFile() {
   ofstream file;
   file.open("output-serial.txt");
+  file << toString();
+  file.close();
+}
+
+void Board::writeBoardToParallelFile() {
+  ofstream file;
+  file.open("output-parallel.txt");
   file << toString();
   file.close();
 }
