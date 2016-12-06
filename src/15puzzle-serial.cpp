@@ -6,10 +6,11 @@
 
 using namespace std;
 
-int main (int argc, const char* argv[]) {
-	string filename = argv[1];
-	Board blocks (filename);
-	int returnCode = 0;
-	blocks.print();
-	return returnCode;
+int main(int argc, const char *argv[]) {
+  string filename = argv[1];
+  Board blocks(filename);
+  Solver solver(blocks);
+  solver.print();
+  int returnCode = 0;
+  return returnCode;
 }
