@@ -145,8 +145,9 @@ int Board::manhattan() {
   int count = 0;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
-      if (!(i == 3 && j == 3)) {
-        count += getDistance(j, i, blocks[i][j]);
+      if (!(blocks[i][j] == 0)) {
+        int dist = getDistance(j, i, blocks[i][j]);
+        count += dist;
       }
     }
   }
@@ -221,7 +222,7 @@ string Board::toString() {
       }
       os << toPrint << "\t";
     }
-    os << "\n";
+    os << endl;
   }
   string str = os.str();
   return str;
