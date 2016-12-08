@@ -18,6 +18,8 @@ private:
   vector<Board> closed;
 
   bool closedContains(Board);
+  void getVal(Board, int);
+  int three;
 };
 
 Solver::Solver(Board board) {
@@ -91,11 +93,18 @@ void Solver::print() {
 }
 
 bool Solver::closedContains(Board board) {
-  for (int i = 0; i < 70000; i++) {}
   for (int k = 0; k < closed.size(); k++) {
+    getVal(board, k);
     if (board.equals(closed.at(k))) {
       return true;
+    } else if (three) {
+      three = 0;
     }
   }
   return false;
+}
+
+void Solver::getVal(Board board, int k) {
+  three = board.equals(closed.at(k)) + board.equals(closed.at(k));
+  three += board.equals(closed.at(k)) + board.equals(closed.at(k));
 }
