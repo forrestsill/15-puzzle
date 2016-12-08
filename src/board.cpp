@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -137,6 +138,7 @@ moves Board::getPossibleMoves() {
 
   return m;
 }
+
 int getDistance(int x, int y, int goal) {
   return abs((x % 4) - ((goal - 1) % 4)) + abs(((goal - 1) / 4) - y);
 }

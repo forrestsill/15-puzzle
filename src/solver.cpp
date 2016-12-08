@@ -9,14 +9,13 @@ using namespace std;
 class Solver {
 public:
   Solver(Board);
-  void solve();
-  void printClosed();
+  void solve(Board, int);
+  int getMinThresholdFromNextDepth(Board);
+  vector<Board> getPossibleResultingBoards(Board);
   void print();
 
 private:
-  priority_queue<Board, vector<Board>, greater<vector<Board>::value_type>> open;
   vector<Board> closed;
-
   bool closedContains(Board);
 };
 
@@ -24,95 +23,74 @@ Solver::Solver(Board board) {
   if (board.isSolved()) {
     return;
   }
-  open.push(board);
-  Board b = open.top();
-  while (!b.isSolved()) {
-    solve();
-    b = open.top();
-  }
-  solve();
-  b.writeBoardToSerialFile();
+  int threshold = getMinThresholdFromNextDepth(board);
+  cout << "Starting threshold: " << threshold << endl;
+  // cout << "Starting move 1: " << endl;
+  // getPossibleResultingBoards(board).at(0).print();
+  // cout << "Starting move 2: " << endl;
+  // getPossibleResultingBoards(board).at(1).print();
+  // cout << "Starting move 3: " << endl;
+  // getPossibleResultingBoards(board).at(2).print();
+  solve(board, threshold);
 }
 
-void Solver::solve() {
-  Board board = open.top();
-  board.freezePriority();
-  open.pop();
-  int numMovesPossible = board.numMovesPossible();
-  cout << "Possible moves: " << numMovesPossible
-       << ". Up: " << board.getPossibleMoves().up
-       << ", down: " << board.getPossibleMoves().down
-       << ", left: " << board.getPossibleMoves().left
-       << ", right: " << board.getPossibleMoves().right << endl;
-  if (board.getPossibleMoves().up) {
+vector<Board> Solver::getPossibleResultingBoards(Board board) {
+  moves m = board.getPossibleMoves();
+  vector<Board> ret;
+  if (m.up) {
     Board up = Board(board);
     up.moveUp();
-    cout << "UP:";
     up.freezePriority();
-    up.print();
-    cout << endl;
-    if (!closedContains(up)) {
-      open.push(up);
-    }
+    ret.push_back(up);
   }
-  if (board.getPossibleMoves().down) {
+  if (m.down) {
     Board down = Board(board);
     down.moveDown();
-    cout << "DOWN:";
     down.freezePriority();
-    down.print();
-    cout << endl;
-    if (!closedContains(down)) {
-      open.push(down);
-    }
+    ret.push_back(down);
   }
-  if (board.getPossibleMoves().right) {
+  if (m.right) {
     Board right = Board(board);
     right.moveRight();
-    cout << "RIGHT:";
     right.freezePriority();
-    right.print();
-    cout << endl;
-    if (!closedContains(right)) {
-      open.push(right);
-    }
+    ret.push_back(right);
   }
-  if (board.getPossibleMoves().left) {
+  if (m.left) {
     Board left = Board(board);
     left.moveLeft();
-    cout << "LEFT:";
     left.freezePriority();
-    left.print();
-    cout << endl;
-    if (!closedContains(left)) {
-      open.push(left);
+    ret.push_back(left);
+  }
+  return ret;
+}
+
+int Solver::getMinThresholdFromNextDepth(Board board) {
+  vector<Board> boards = getPossibleResultingBoards(board);
+  int min = boards.at(0).frozenPriority;
+  for (int i = 1; i < boards.size(); i++) {
+    if (boards.at(i).frozenPriority < min) {
+      min = boards.at(i).frozenPriority;
     }
   }
+  return min;
+}
+
+void Solver::solve(Board board, int threshold) {
   closed.push_back(board);
-}
-
-void Solver::printClosed() {
-  cout << "List of closed:" << endl;
-  for (int k = 0; k < closed.size(); k++) {
-    closed.at(k).print();
+  if (board.isSolved()) {
+    return;
   }
-}
+  vector<Board> possibleMoves = getPossibleResultingBoards(board);
+  for (int i = 0; i < possibleMoves.size(); i++) {
+    Board cur = possibleMoves.at(i);
 
-void Solver::print() {
-  cout << "Top of open (size: " << open.size() << "):" << endl;
-  if (open.size() > 0) {
-    Board top = open.top();
-    top.print();
-  } else {
-    cout << "Empty";
-  }
-  cout << endl;
-
-  cout << "Closed (size: " << closed.size() << "):" << endl;
-  if (closed.size() == 0) {
-    cout << "Empty" << endl;
-  } else {
-    printClosed();
+    if (cur.frozenPriority <= threshold) {
+      if (!closedContains(cur)) {
+        cur.print();
+        threshold++;
+        solve(cur, threshold);
+      }
+    }
   }
 }
 
@@ -124,3 +102,5 @@ bool Solver::closedContains(Board board) {
   }
   return false;
 }
+
+void Solver::print() {}
