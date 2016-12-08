@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define NUM_THREADS 2
+#define NUM_THREADS 4
 
 vector<Board> initalBoards;
 
