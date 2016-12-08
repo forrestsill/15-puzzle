@@ -15,8 +15,8 @@ public:
   void print();
 
 private:
-  vector<Board> closed;
-  bool closedContains(Board);
+  bool solved;
+  bool closedContains(Board, vector<Board>);
 };
 
 Solver::Solver(Board board) {
@@ -31,7 +31,11 @@ Solver::Solver(Board board) {
   // getPossibleResultingBoards(board).at(1).print();
   // cout << "Starting move 3: " << endl;
   // getPossibleResultingBoards(board).at(2).print();
-  solve(board, threshold);
+  while (!solved) {
+    solve(board, threshold);
+    threshold++;
+  }
+
 }
 
 vector<Board> Solver::getPossibleResultingBoards(Board board) {
@@ -40,24 +44,28 @@ vector<Board> Solver::getPossibleResultingBoards(Board board) {
   if (m.up) {
     Board up = Board(board);
     up.moveUp();
+    up.movesMade++;
     up.freezePriority();
     ret.push_back(up);
   }
   if (m.down) {
     Board down = Board(board);
     down.moveDown();
+    down.movesMade++;
     down.freezePriority();
     ret.push_back(down);
   }
   if (m.right) {
     Board right = Board(board);
     right.moveRight();
+    right.movesMade++;
     right.freezePriority();
     ret.push_back(right);
   }
   if (m.left) {
     Board left = Board(board);
     left.moveLeft();
+    left.movesMade++;
     left.freezePriority();
     ret.push_back(left);
   }
@@ -76,8 +84,10 @@ int Solver::getMinThresholdFromNextDepth(Board board) {
 }
 
 void Solver::solve(Board board, int threshold) {
+  vector<Board> closed;
   closed.push_back(board);
   if (board.isSolved()) {
+    solved = true;
     return;
   }
   vector<Board> possibleMoves = getPossibleResultingBoards(board);
@@ -85,16 +95,15 @@ void Solver::solve(Board board, int threshold) {
     Board cur = possibleMoves.at(i);
 
     if (cur.frozenPriority <= threshold) {
-      if (!closedContains(cur)) {
+      if (!closedContains(cur, closed)) {
         cur.print();
-        threshold++;
         solve(cur, threshold);
       }
     }
   }
 }
 
-bool Solver::closedContains(Board board) {
+bool Solver::closedContains(Board board, vector<Board> closed) {
   for (int k = 0; k < closed.size(); k++) {
     if (board.equals(closed.at(k))) {
       return true;

@@ -99,7 +99,7 @@ void Board::moveRight() {
   movesMade++;
 }
 
-void Board::freezePriority() { this->frozenPriority = priority(); }
+void Board::freezePriority() { this->frozenPriority = priority() + this->movesMade; }
 
 int Board::numBlocksInWrongPosition() {
   int count = 0;
