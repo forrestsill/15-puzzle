@@ -47,10 +47,10 @@ void Solver::solve() {
   if (board.getPossibleMoves().up) {
     Board up = Board(board);
     up.moveUp();
-    cout << "UP:";
+    // cout << "UP:";
     up.freezePriority();
-    up.print();
-    cout << endl;
+    // up.print();
+    // cout << endl;
     if (!closedContains(up)) {
       open.push(up);
     }
@@ -58,10 +58,10 @@ void Solver::solve() {
   if (board.getPossibleMoves().down) {
     Board down = Board(board);
     down.moveDown();
-    cout << "DOWN:";
+    // cout << "DOWN:";
     down.freezePriority();
-    down.print();
-    cout << endl;
+    // down.print();
+    // cout << endl;
     if (!closedContains(down)) {
       open.push(down);
     }
@@ -69,10 +69,10 @@ void Solver::solve() {
   if (board.getPossibleMoves().right) {
     Board right = Board(board);
     right.moveRight();
-    cout << "RIGHT:";
+    // cout << "RIGHT:";
     right.freezePriority();
-    right.print();
-    cout << endl;
+    // right.print();
+    // cout << endl;
     if (!closedContains(right)) {
       open.push(right);
     }
@@ -80,10 +80,10 @@ void Solver::solve() {
   if (board.getPossibleMoves().left) {
     Board left = Board(board);
     left.moveLeft();
-    cout << "LEFT:";
+    // cout << "LEFT:";
     left.freezePriority();
-    left.print();
-    cout << endl;
+    // left.print();
+    // cout << endl;
     if (!closedContains(left)) {
       open.push(left);
     }
@@ -99,10 +99,10 @@ void Solver::printClosed() {
 }
 
 void Solver::print() {
-  cout << "Top of open (size: " << open.size() << "):" << endl;
+  // cout << "Top of open (size: " << open.size() << "):" << endl;
   if (open.size() > 0) {
     Board top = open.top();
-    top.print();
+    // top.print();
   } else {
     cout << "Empty";
   }
@@ -112,7 +112,7 @@ void Solver::print() {
   if (closed.size() == 0) {
     cout << "Empty" << endl;
   } else {
-    printClosed();
+    // printClosed();
   }
 }
 

@@ -9,8 +9,9 @@ using namespace std;
 class Thread {
 public:
   priority_queue<Board, vector<Board>, greater<vector<Board>::value_type>> open;
+  int threadID;
 
-  Thread(Board);
+  Thread(Board, int);
   void solve();
   void print();
 };

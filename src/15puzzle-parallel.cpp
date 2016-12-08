@@ -66,8 +66,8 @@ void *startThread(void *threadID) {
   int tID = static_cast<int>((long)threadID);
   Board board = initalBoards.at(tID);
   board.print();
-  Thread thread = Thread(board);
-
+  Thread thread = Thread(board, tID);
+  // cout << "Winning thread: " << winningThread << endl;
   pthread_exit(NULL);
 }
 
@@ -82,7 +82,7 @@ void *execute(void *argv) {
   getPossibleBoards(blocks);
 
   int rc;
-  for (long i = 0; i < 2; i++) {
+  for (long i = 0; i < NUM_THREADS; i++) {
     cout << "Creating thread: " << i << endl;
     rc = pthread_create(&thread[i], NULL, startThread, (void *)i);
 
