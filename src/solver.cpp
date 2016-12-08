@@ -91,6 +91,7 @@ void Solver::print() {
 }
 
 bool Solver::closedContains(Board board) {
+  for (int i = 0; i < 70000; i++) {}
   for (int k = 0; k < closed.size(); k++) {
     if (board.equals(closed.at(k))) {
       return true;
