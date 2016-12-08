@@ -220,7 +220,10 @@ string Board::toString() {
       if (!toPrint.compare("0")) {
         toPrint = "-";
       }
-      os << toPrint << "\t";
+      os << toPrint;
+      if (j != 3){
+         os << "\t";
+      }
     }
     os << endl;
   }

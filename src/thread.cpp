@@ -20,14 +20,6 @@ Thread::Thread(Board board, int threadID) {
     b = open.top();
   }
   solve();
-  b.print();
-  // winningThreadMutex.lock();
-  cout << "Winning thread: " << winningThread << endl;
-  // winningThreadMutex.unlock();
-
-  // wonMutex.lock();
-  cout << "Won: " << won << endl;
-  // wonMutex.unlock();
 }
 
 bool closedContains(Board board) {
@@ -45,38 +37,30 @@ void Thread::solve() {
 
   bool finished = false;
 
-  // wonMutex.lock();
+  wonMutex.lock();
   finished = board.isSolved() || won;
-  // wonMutex.unlock();
+  wonMutex.unlock();
 
   if (finished) {
-    // cout << "FINISHED" << endl;
     wonMutex.lock();
     won = true;
     wonMutex.unlock();
-
-    // winningThreadMutex.lock();
-    winningThread = this->threadID;
-    // winningThreadMutex.unlock();
+    winningThreadMutex.lock();
+    if (winningThread == -1) {
+      board.writeBoardToParallelFile();
+      winningThread = this->threadID;
+    }
+    winningThreadMutex.unlock();
 
     return;
   }
 
   open.pop();
   int numMovesPossible = board.numMovesPossible();
-  cout << "Thread: " << this->threadID
-       << " | Possible moves: " << numMovesPossible
-       << ". Up: " << board.getPossibleMoves().up
-       << ", down: " << board.getPossibleMoves().down
-       << ", left: " << board.getPossibleMoves().left
-       << ", right: " << board.getPossibleMoves().right << endl;
   if (board.getPossibleMoves().up) {
     Board up = Board(board);
     up.moveUp();
-    cout << "UP:";
     up.freezePriority();
-    up.print();
-    cout << endl;
     if (!closedContains(up)) {
       open.push(up);
     }
@@ -84,10 +68,7 @@ void Thread::solve() {
   if (board.getPossibleMoves().down) {
     Board down = Board(board);
     down.moveDown();
-    cout << "DOWN:";
     down.freezePriority();
-    down.print();
-    cout << endl;
     if (!closedContains(down)) {
       open.push(down);
     }
@@ -95,10 +76,7 @@ void Thread::solve() {
   if (board.getPossibleMoves().right) {
     Board right = Board(board);
     right.moveRight();
-    cout << "RIGHT:";
     right.freezePriority();
-    right.print();
-    cout << endl;
     if (!closedContains(right)) {
       open.push(right);
     }
@@ -106,10 +84,7 @@ void Thread::solve() {
   if (board.getPossibleMoves().left) {
     Board left = Board(board);
     left.moveLeft();
-    cout << "LEFT:";
     left.freezePriority();
-    left.print();
-    cout << endl;
     if (!closedContains(left)) {
       open.push(left);
     }
@@ -120,12 +95,7 @@ void Thread::solve() {
 }
 
 void Thread::print() {
-  cout << "Top of open (size: " << open.size() << "):" << endl;
   if (open.size() > 0) {
     Board top = open.top();
-    top.print();
-  } else {
-    cout << "Empty";
   }
-  cout << endl;
 }

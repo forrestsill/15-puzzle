@@ -39,18 +39,10 @@ void Solver::solve() {
   board.freezePriority();
   open.pop();
   int numMovesPossible = board.numMovesPossible();
-  cout << "Possible moves: " << numMovesPossible
-       << ". Up: " << board.getPossibleMoves().up
-       << ", down: " << board.getPossibleMoves().down
-       << ", left: " << board.getPossibleMoves().left
-       << ", right: " << board.getPossibleMoves().right << endl;
   if (board.getPossibleMoves().up) {
     Board up = Board(board);
     up.moveUp();
-    // cout << "UP:";
     up.freezePriority();
-    // up.print();
-    // cout << endl;
     if (!closedContains(up)) {
       open.push(up);
     }
@@ -58,10 +50,7 @@ void Solver::solve() {
   if (board.getPossibleMoves().down) {
     Board down = Board(board);
     down.moveDown();
-    // cout << "DOWN:";
     down.freezePriority();
-    // down.print();
-    // cout << endl;
     if (!closedContains(down)) {
       open.push(down);
     }
@@ -69,10 +58,7 @@ void Solver::solve() {
   if (board.getPossibleMoves().right) {
     Board right = Board(board);
     right.moveRight();
-    // cout << "RIGHT:";
     right.freezePriority();
-    // right.print();
-    // cout << endl;
     if (!closedContains(right)) {
       open.push(right);
     }
@@ -80,10 +66,7 @@ void Solver::solve() {
   if (board.getPossibleMoves().left) {
     Board left = Board(board);
     left.moveLeft();
-    // cout << "LEFT:";
     left.freezePriority();
-    // left.print();
-    // cout << endl;
     if (!closedContains(left)) {
       open.push(left);
     }
@@ -92,27 +75,18 @@ void Solver::solve() {
 }
 
 void Solver::printClosed() {
-  cout << "List of closed:" << endl;
-  for (int k = 0; k < closed.size(); k++) {
-    closed.at(k).print();
-  }
 }
 
 void Solver::print() {
-  // cout << "Top of open (size: " << open.size() << "):" << endl;
   if (open.size() > 0) {
     Board top = open.top();
-    // top.print();
   } else {
     cout << "Empty";
   }
-  cout << endl;
 
-  cout << "Closed (size: " << closed.size() << "):" << endl;
   if (closed.size() == 0) {
     cout << "Empty" << endl;
   } else {
-    // printClosed();
   }
 }
 
