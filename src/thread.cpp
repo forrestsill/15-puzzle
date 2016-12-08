@@ -73,10 +73,10 @@ void Thread::solve() {
   if (board.getPossibleMoves().up) {
     Board up = Board(board);
     up.moveUp();
-    // cout << "UP:";
+    cout << "UP:";
     up.freezePriority();
-    // up.print();
-    // cout << endl;
+    up.print();
+    cout << endl;
     if (!closedContains(up)) {
       open.push(up);
     }
@@ -84,10 +84,10 @@ void Thread::solve() {
   if (board.getPossibleMoves().down) {
     Board down = Board(board);
     down.moveDown();
-    // cout << "DOWN:";
+    cout << "DOWN:";
     down.freezePriority();
-    // down.print();
-    // cout << endl;
+    down.print();
+    cout << endl;
     if (!closedContains(down)) {
       open.push(down);
     }
@@ -95,10 +95,10 @@ void Thread::solve() {
   if (board.getPossibleMoves().right) {
     Board right = Board(board);
     right.moveRight();
-    // cout << "RIGHT:";
+    cout << "RIGHT:";
     right.freezePriority();
-    // right.print();
-    // cout << endl;
+    right.print();
+    cout << endl;
     if (!closedContains(right)) {
       open.push(right);
     }
@@ -106,10 +106,10 @@ void Thread::solve() {
   if (board.getPossibleMoves().left) {
     Board left = Board(board);
     left.moveLeft();
-    // cout << "LEFT:";
+    cout << "LEFT:";
     left.freezePriority();
-    // left.print();
-    // cout << endl;
+    left.print();
+    cout << endl;
     if (!closedContains(left)) {
       open.push(left);
     }
